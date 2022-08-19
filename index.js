@@ -51,8 +51,20 @@ app.post("/login", (req, res) => {
 app.post("/register", (req, res) => {
   const userID = req.body.userID;
   const userPW = req.body.userPW;
+  const userName = req.body.userName;
+  const userEmail = req.body.userEmail;
+  const userZipcode = req.body.zipCode;
+  const userAddress = req.body.address01 + " / " + req.body.address02;
+  const userGender = req.body.gender;
+  const userJob = req.body.job;
   console.log(userID);
   console.log(userPW);
+  console.log(userName);
+  console.log(userEmail);
+  console.log(userZipcode);
+  console.log(userAddress);
+  console.log(userGender);
+  console.log(userJob);
   db.collection("member").insertOne({ userID: userID, userPW: userPW }, (err, result) => {
     if (err) {
       console.log(err);
@@ -60,7 +72,7 @@ app.post("/register", (req, res) => {
     }
     //res.redirect("/login");
     //res.send(`<script>alert("회원가입이 잘 되었습니다.");location.href="/login"</script>`);
-    res.render("registerSuccess");
+    res.render("registerSuccess", { title: "success" });
   });
   //res.send(`아이디는 ${req.body.userID}==패스워드는 ${req.body.userPW}`);
 });
