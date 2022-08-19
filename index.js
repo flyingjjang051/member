@@ -65,7 +65,17 @@ app.post("/register", (req, res) => {
   console.log(userAddress);
   console.log(userGender);
   console.log(userJob);
-  db.collection("member").insertOne({ userID: userID, userPW: userPW }, (err, result) => {
+  const insertData = {
+    userID: userID,
+    userPW: userPW,
+    userName: userName,
+    userEmail: userEmail,
+    userZipcode: userZipcode,
+    userAddress: userAddress,
+    userGender: userGender,
+    userJob: userJob,
+  };
+  db.collection("member").insertOne(insertData, (err, result) => {
     if (err) {
       console.log(err);
       res.send(`<script>alert("알 수 없는 오류로 회원가입이 되지 않았습니다. 잠시후 다시 가입해 주세요"); location.href="/"</script>`);
@@ -93,7 +103,17 @@ app.post("/registerAjax", (req, res) => {
   });
   //res.send(`아이디는 ${req.body.userID}==패스워드는 ${req.body.userPW}`);
 });
-
+app.post("/idCheck", (req, res) => {
+  const userID = req.body.userID;
+  db.collection("member").findOne({ userID: userID }, (err, result) => {
+    //console.log(result);
+    if (result === null) {
+      res.json({ isOk: true });
+    } else {
+      res.json({ isOk: false });
+    }
+  });
+});
 app.listen(PORT, () => {
   console.log(`${PORT}에서 서버 대기중`);
 });
