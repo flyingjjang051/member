@@ -1,0 +1,105 @@
+<%- include("include/header"); %>
+<main id="main">
+  <div id="contents">
+    <h2 class="title"><%= title %></h2>
+    <!-- <div class="joinForm">
+      <div class="inputBox">
+        <label>
+          <span>ID</span>
+          <input type="text" id="userID" name="userID" placeholder="ID를 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>Password</span>
+          <input type="password" id="userPW" name="userPW" placeholder="password를 입력하세요" />
+        </label>
+      </div>
+      <button id="btnJoin">회원가입</button>
+    </div>
+    <hr /> -->
+    <form action="/register" method="POST">
+      <div class="inputBox">
+        <label>
+          <span>ID</span>
+          <input type="text" id="userID" name="userID" placeholder="ID를 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>Password</span>
+          <input type="password" id="userPW" name="userPW" placeholder="password를 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>Name</span>
+          <input type="text" id="userName" name="userName" placeholder="이름을 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>Email</span>
+          <input type="text" id="userEmail" name="userEmail" placeholder=" 이메일을 입력하세요" />
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>Address</span>
+          <div>
+            <div class="zipCodeBox">
+              <input type="text" id="zipCode" name="zipCode" placeholder="우편번호" readonly />
+              <button id="btnZipcode">우편번호 찾기</button>
+            </div>
+            <input type="text" id="address01" name="address01" />
+            <input type="text" id="address02" name="address01" />
+          </div>
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>성별</span>
+          <div class="genderBox">
+            <div><input type="radio" id="male" name="gender" value="male" /><span>남자</span></div>
+            <div><input type="radio" id="female" name="gender" value="female" /><span>여자</span></div>
+          </div>
+        </label>
+      </div>
+      <div class="inputBox">
+        <label>
+          <span>직업</span>
+          <select name="job" id="">
+            <option value="학생">학생</option>
+            <option value="프로그래머">프로그래머</option>
+            <option value="기획자">기획자</option>
+            <option value="디자이너">디자이너</option>
+          </select>
+        </label>
+      </div>
+      <div class="btns">
+        <button type="submit">회원가입</button>
+        <button type="reset">취소</button>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+  $("#btnJoin").on("click", () => {
+    $.ajax({
+      url: "/registerAjax",
+      data: {
+        userID: $("#userID").val(),
+        userPW: $("#userPW").val(),
+      },
+      method: "POST",
+    }).done((response) => {
+      console.log(response);
+      if (response.isJoin) {
+        //alert("회원가입이 잘 되었습니다.");
+        //location.href = "/login";
+        location.href = "/success";
+      }
+    });
+  });
+</script>
+<%- include("include/footer"); %>
