@@ -85,21 +85,26 @@ a {
       }
     }
   }
-  .btns {
-    margin-top: 50px;
+}
+.btns {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  button,
+  a {
+    font-family: "Noto Sans KR";
     display: flex;
+    font-size: 16px;
     justify-content: center;
-    button {
-      height: 50px;
-      padding: 0 20px;
-      background-color: #111;
-      color: #fff;
-      margin: 0 5px;
-      border-radius: 5px;
-    }
+    align-items: center;
+    height: 50px;
+    padding: 0 20px;
+    background-color: #111;
+    color: #fff;
+    margin: 0 5px;
+    border-radius: 5px;
   }
 }
-
 @media all and (max-width: 1200px) {
   #contents {
     width: 100%;

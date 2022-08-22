@@ -2,28 +2,11 @@
 <main id="main">
   <div id="contents">
     <h2 class="title"><%= title %></h2>
-    <!-- <div class="joinForm">
-      <div class="inputBox">
-        <label>
-          <span>ID</span>
-          <input type="text" id="userID" name="userID" placeholder="ID를 입력하세요" />
-        </label>
-      </div>
-      <div class="inputBox">
-        <label>
-          <span>Password</span>
-          <input type="password" id="userPW" name="userPW" placeholder="password를 입력하세요" />
-        </label>
-      </div>
-      <button id="btnJoin">회원가입</button>
-    </div>
-    <hr /> -->
-    <form action="/modify" method="POST" id="join" class="formBox">
+    <form action="/register" method="POST" id="join" class="formBox">
       <div class="inputBox">
         <label>
           <span class="label">ID</span>
-          <input type="text" id="userID" name="userID" placeholder="ID를 입력하세요" />
-          <button id="btnIdCheck">아이디 중복확인</button>
+          <input type="text" id="userID" name="userID" value="<%= userInfo.userID %>" readonly />
         </label>
       </div>
       <div class="inputBox">
@@ -78,7 +61,7 @@
         </label>
       </div>
       <div class="btns">
-        <button type="submit" data-value="10" id="btnJoin">정보수정</button>
+        <button type="submit" data-value="10" id="btnJoin">회원가입</button>
         <button type="reset">취소</button>
       </div>
     </form>
@@ -129,15 +112,9 @@
       }).done((response) => {
         //console.log(response);
         if (response.isOk) {
-          const result = confirm("쓸수 있는 아이디 입니다.");
-          if (result) {
-            $("#userID").attr("readonly", true);
-            isIdChecked = true;
-          } else {
-            $("#userID").focus();
-            $("#userID").val("");
-            isIdChecked = false;
-          }
+          alert("쓸수 있는 아이디 입니다.");
+          $("#userID").attr("readonly", true);
+          isIdChecked = true;
         } else {
           //alert("쓸수 없는 아이디 입니다.");
           console.log("쓸 수 없는 아이디 입니다.");

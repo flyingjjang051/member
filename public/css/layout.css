@@ -83,12 +83,19 @@ a {
 .formBox .inputBox label #userJob {
   width: 200px;
 }
-.formBox .btns {
+
+.btns {
   margin-top: 50px;
   display: flex;
   justify-content: center;
 }
-.formBox .btns button {
+.btns button,
+.btns a {
+  font-family: "Noto Sans KR";
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
   height: 50px;
   padding: 0 20px;
   background-color: #111;
