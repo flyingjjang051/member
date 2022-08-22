@@ -99,6 +99,23 @@ app.get("/logout", (req, res) => {
     res.send(`<script>alert("로그아웃되었습니다."); location.href="/"</script>`);
   }
 });
+
+app.get("/delete", (req, res) => {
+  res.render("delete", { title: "Member Delete" });
+});
+app.post("/delete", (req, res) => {
+  console.log(req.user.userID);
+  const userPW = req.body.userPW;
+  db.collection("member").deleteOne({ userID: req.user.userID, userPW: userPW }, (err, result) => {
+    console.log(result);
+    if (result.deletedCount > 0) {
+      res.send(`<script>alert("회원탈퇴 되었습니다.");location.href="/"</script>`);
+    } else {
+      res.send(`<script>alert("비밀번호 확인해주세요.");location.href="/delete";</script>`);
+    }
+  });
+});
+
 app.get("/mypage", isLogged, (req, res) => {
   //console.log(req.user);
   res.render("mypage", { title: "mypage", userInfo: req.user });
