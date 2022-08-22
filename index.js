@@ -2,6 +2,41 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv").config();
 const path = require("path");
+
+// session처리용...
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const session = require("express-session");
+
+app.use(session({ secret: "비밀코드는아무거나", resave: true, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new LocalStrategy({
+    usernameField:"userID",
+    passwordField:"userPW",
+    session:true,
+    passReqToCallback:false
+  },
+  (id,password,done)=>{
+    console.log(id,"====",password);
+    db.collection("member").findOne({userID:id},(err,result)=>{
+      if(err) return done(err);
+      if(!result) return done(null,false,{message:"존재하지 않는 아이디 입니다."});
+      if(result) {
+        if(password===result.userPW) {
+          console.log("로그인 성공");
+          return done(null,result);
+        } else {
+          console.log("로그인 실패");
+          return done(null,false,{message:"password를 확인해주세요."});
+        }
+      }
+    })
+  });
+)
+
 const MongoClient = require("mongodb").MongoClient;
 let db = null;
 MongoClient.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, (err, client) => {
@@ -29,6 +64,7 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login", { title: "login" });
 });
+/*
 app.post("/login", (req, res) => {
   console.log(req);
   const userID = req.body.userID;
@@ -47,6 +83,8 @@ app.post("/login", (req, res) => {
   });
   //res.render("login");
 });
+*/
+app.post("/login",passport.authenticate("local",{failureRedirect:"/login",successRedirect:"/"}))
 
 app.post("/register", (req, res) => {
   const userID = req.body.userID;
