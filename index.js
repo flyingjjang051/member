@@ -108,6 +108,30 @@ app.get("/modify", isLogged, (req, res) => {
   //console.log(req.user);
   res.render("modify", { title: "modify", userInfo: req.user });
 });
+app.post("/modify", (req, res) => {
+  // join 이랑 똑같은 로직을 탄다.
+  // 대신 insertOne updateOne을 쓴다.
+  // 이떄 패스워드가 같아야지만 update를 해준다.
+  const userID = req.body.userID;
+  const userPW = req.body.userPW;
+  const userName = req.body.userName;
+  const userEmail = req.body.userEmail;
+  const userZipcode = req.body.userZipcode;
+  const userAddress = req.body.address01 + "/" + req.body.address02;
+  const userGender = req.body.gender;
+  const userJob = req.body.job;
+  db.collection("member").updateOne(
+    { userID: userID },
+    { $set: { userPW: userPW, userName: userName, userEmail: userEmail, userZipcode: userZipcode, userAddress: userAddress, userGender: userGender, userJob: userJob } },
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+      res.send(`<script>alert("회원정보 수정이 되었습니다.");location.href="/";</script>`);
+    }
+  );
+});
 
 // 미들웨어 얘는 마지막에 무조건 next 있어야 함.
 function isLogged(req, res, next) {
