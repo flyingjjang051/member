@@ -82,7 +82,8 @@ app.post("/register", (req, res) => {
     }
     //res.redirect("/login");
     //res.send(`<script>alert("회원가입이 잘 되었습니다.");location.href="/login"</script>`);
-    res.render("registerSuccess", { title: "success" });
+    //res.render("registerSuccess", { title: "success" });
+    res.redirect("/success");
   });
   //res.send(`아이디는 ${req.body.userID}==패스워드는 ${req.body.userPW}`);
 });

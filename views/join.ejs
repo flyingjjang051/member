@@ -78,7 +78,7 @@
         </label>
       </div>
       <div class="btns">
-        <button type="submit">회원가입</button>
+        <button type="submit" data-value="10">회원가입</button>
         <button type="reset">취소</button>
       </div>
     </form>
@@ -118,23 +118,29 @@
   });
 
   $("#btnIdCheck").on("click", () => {
-    $.ajax({
-      url: "/idCheck",
-      method: "POST",
-      data: {
-        userID: $("#userID").val(),
-      },
-    }).done((response) => {
-      //console.log(response);
-      if (response.isOk) {
-        alert("쓸수 있는 아이디 입니다.");
-        $("#userID").attr("readonly", true);
-      } else {
-        alert("쓸수 없는 아이디 입니다.");
-        $("#userID").val("");
-        $("#userID").focus();
-      }
-    });
+    if ($("#userID").val().length > 7) {
+      $.ajax({
+        url: "/idCheck",
+        method: "POST",
+        data: {
+          userID: $("#userID").val(),
+        },
+      }).done((response) => {
+        //console.log(response);
+        if (response.isOk) {
+          alert("쓸수 있는 아이디 입니다.");
+          $("#userID").attr("readonly", true);
+        } else {
+          //alert("쓸수 없는 아이디 입니다.");
+          console.log("쓸 수 없는 아이디 입니다.");
+          $("#userID").val("");
+          $("#userID").focus();
+        }
+      });
+    } else {
+      alert("아이디는 8글자 이상이어야 합니다.");
+      $("#userID").focus();
+    }
     return false;
   });
 </script>
