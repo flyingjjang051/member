@@ -7,6 +7,8 @@ const path = require("path");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
+const { copyFileSync } = require("fs");
+const { serialize } = require("v8");
 
 app.use(session({ secret: "비밀코드는아무거나", resave: true, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -43,6 +45,17 @@ passport.use(
   )
 );
 
+passport.serializeUser((user, done) => {
+  console.log("serializeUser===", user);
+  done(null, user.userID);
+});
+passport.deserializeUser((id, done) => {
+  db.collection("member").findOne({ userID: id }, (err, result) => {
+    console.log(result);
+    done(null, result);
+  });
+});
+
 const MongoClient = require("mongodb").MongoClient;
 let db = null;
 MongoClient.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, (err, client) => {
@@ -59,7 +72,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "/public")));
 app.get("/", (req, res) => {
-  res.render("index", { title: "main" });
+  res.render("index", { title: "main", userInfo: req.user });
 });
 app.get("/join", (req, res) => {
   res.render("join", { title: "join" });
@@ -70,6 +83,23 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login", { title: "login" });
 });
+app.get(
+  "/mypage",
+  (req, res, next) => {
+    if (req.user) {
+      console.log("로그인 되어 있음");
+      next();
+    } else {
+      console.log(res);
+      res.send(`<script>alert("로그인 먼저 하셔야 합니다."); location.href="/login";</script>`);
+    }
+  },
+  (req, res) => {
+    console.log(req.user);
+    res.render("mypage", { title: "mypage", userInfo: req.user });
+  }
+);
+
 /*
 app.post("/login", (req, res) => {
   console.log(req);
