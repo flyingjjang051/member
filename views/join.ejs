@@ -18,35 +18,35 @@
       <button id="btnJoin">회원가입</button>
     </div>
     <hr /> -->
-    <form action="/register" method="POST">
+    <form action="/register" method="POST" id="join" class="formBox">
       <div class="inputBox">
         <label>
-          <span>ID</span>
+          <span class="label">ID</span>
           <input type="text" id="userID" name="userID" placeholder="ID를 입력하세요" />
           <button id="btnIdCheck">아이디 중복확인</button>
         </label>
       </div>
       <div class="inputBox">
         <label>
-          <span>Password</span>
+          <span class="label">Password</span>
           <input type="password" id="userPW" name="userPW" placeholder="password를 입력하세요" />
         </label>
       </div>
       <div class="inputBox">
         <label>
-          <span>Name</span>
+          <span class="label">Name</span>
           <input type="text" id="userName" name="userName" placeholder="이름을 입력하세요" />
         </label>
       </div>
       <div class="inputBox">
         <label>
-          <span>Email</span>
+          <span class="label">Email</span>
           <input type="text" id="userEmail" name="userEmail" placeholder=" 이메일을 입력하세요" />
         </label>
       </div>
       <div class="inputBox">
         <label>
-          <span>Address</span>
+          <span class="label">Address</span>
           <div>
             <div class="zipCodeBox">
               <input type="text" id="zipCode" name="zipCode" placeholder="우편번호" readonly />
@@ -59,7 +59,7 @@
       </div>
       <div class="inputBox">
         <label>
-          <span>성별</span>
+          <span class="label">성별</span>
           <div class="genderBox">
             <div><input type="radio" id="male" name="gender" value="남자" /><span>남자</span></div>
             <div><input type="radio" id="female" name="gender" value="여자" /><span>여자</span></div>
@@ -68,8 +68,8 @@
       </div>
       <div class="inputBox">
         <label>
-          <span>직업</span>
-          <select name="job" id="">
+          <span class="label">직업</span>
+          <select name="job" id="userJob">
             <option value="학생">학생</option>
             <option value="프로그래머">프로그래머</option>
             <option value="기획자">기획자</option>

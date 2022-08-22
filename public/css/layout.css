@@ -9,6 +9,10 @@ a {
   text-decoration: none;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #header {
   height: 60px;
   display: flex;
@@ -38,4 +42,56 @@ a {
   text-transform: uppercase;
   border-bottom: 1px solid #ccc;
   padding-bottom: 50px;
+}
+
+.formBox .inputBox {
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+}
+.formBox .inputBox label {
+  display: flex;
+  align-items: center;
+}
+.formBox .inputBox label .label {
+  width: 150px;
+}
+.formBox .inputBox label input[type=text],
+.formBox .inputBox label input[type=password],
+.formBox .inputBox label select {
+  height: 50px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+.formBox .inputBox label button {
+  height: 50px;
+  margin-left: 10px;
+  border: none;
+  color: #fff;
+  outline: none;
+  border-radius: 5px;
+  background-color: #111;
+  padding: 10px;
+}
+.formBox .inputBox label #userID,
+.formBox .inputBox label #userPW,
+.formBox .inputBox label #userName,
+.formBox .inputBox label #userEmail {
+  flex-grow: 1;
+}
+.formBox .inputBox label #userJob {
+  width: 200px;
+}
+.formBox .btns {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+.formBox .btns button {
+  height: 50px;
+  padding: 0 20px;
+  background-color: #111;
+  color: #fff;
+  margin: 0 5px;
+  border-radius: 5px;
 }
