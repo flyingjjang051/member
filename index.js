@@ -39,8 +39,8 @@ app.post("/login", (req, res) => {
       console.log(err);
     }
     if (result !== null) {
-      res.send(userID + "===" + userPW);
-      //res.redirect("/");
+      //res.send(userID + "===" + userPW);
+      res.redirect("/");
     } else {
       res.send(`<script>alert("아이디 비밀번호 확인해주세요.");history.back();</script>`);
     }
@@ -57,6 +57,7 @@ app.post("/register", (req, res) => {
   const userAddress = req.body.address01 + " / " + req.body.address02;
   const userGender = req.body.gender;
   const userJob = req.body.job;
+  // 넘어온 값은 서버에서 처리하기...
   console.log(userID);
   console.log(userPW);
   console.log(userName);

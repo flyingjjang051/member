@@ -78,7 +78,7 @@
         </label>
       </div>
       <div class="btns">
-        <button type="submit" data-value="10">회원가입</button>
+        <button type="submit" data-value="10" id="btnJoin">회원가입</button>
         <button type="reset">취소</button>
       </div>
     </form>
@@ -87,6 +87,7 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
+  let isIdChecked = false;
   $("#btnZipcode").on("click", () => {
     new daum.Postcode({
       oncomplete: function (data) {
@@ -99,23 +100,23 @@
     // form안에 있는 버튼의 submit 기능 제한
   });
 
-  $("#btnJoin").on("click", () => {
-    $.ajax({
-      url: "/registerAjax",
-      data: {
-        userID: $("#userID").val(),
-        userPW: $("#userPW").val(),
-      },
-      method: "POST",
-    }).done((response) => {
-      console.log(response);
-      if (response.isJoin) {
-        //alert("회원가입이 잘 되었습니다.");
-        //location.href = "/login";
-        location.href = "/success";
-      }
-    });
-  });
+  // $("#btnJoin").on("click", () => {
+  //   $.ajax({
+  //     url: "/registerAjax",
+  //     data: {
+  //       userID: $("#userID").val(),
+  //       userPW: $("#userPW").val(),
+  //     },
+  //     method: "POST",
+  //   }).done((response) => {
+  //     console.log(response);
+  //     if (response.isJoin) {
+  //       //alert("회원가입이 잘 되었습니다.");
+  //       //location.href = "/login";
+  //       location.href = "/success";
+  //     }
+  //   });
+  // });
 
   $("#btnIdCheck").on("click", () => {
     if ($("#userID").val().length > 7) {
@@ -130,6 +131,7 @@
         if (response.isOk) {
           alert("쓸수 있는 아이디 입니다.");
           $("#userID").attr("readonly", true);
+          isIdChecked = true;
         } else {
           //alert("쓸수 없는 아이디 입니다.");
           console.log("쓸 수 없는 아이디 입니다.");
@@ -142,6 +144,30 @@
       $("#userID").focus();
     }
     return false;
+  });
+  const btnJoin = document.querySelector("#btnJoin");
+  $("#btnJoin").on("click", () => {
+    console.log($("#userID").val().trim().length);
+    if ($("#userID").val().trim().length < 8) {
+      alert("아이디는 최소 8자 이상이어야 합니다.");
+      $("#userID").focus();
+      return false;
+    } else if (isIdChecked === false) {
+      alert("ID 중복체크를 해주세요.");
+      return false;
+    } else if ($("#userPW").val().trim().length < 8) {
+      alert("아이디는 최소 8자 이상이어야 합니다.");
+      $("#userPW").focus();
+      return false;
+    } else if ($("#userName").val().trim().length < 3) {
+      alert("이름은 최소 3자 이상이어야 합니다.");
+      $("#userPW").focus();
+      return false;
+    } else if ($("#userEmail").val().trim().length <= 0) {
+      alert("이메일을 입력해 주세요.");
+      $("#userEmail").focus();
+      return false;
+    }
   });
 </script>
 <%- include("include/footer"); %>

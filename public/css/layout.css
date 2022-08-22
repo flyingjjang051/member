@@ -28,6 +28,7 @@ a {
   display: flex;
   justify-content: center;
   font-weight: 500;
+  margin-top: 100px;
 }
 
 #contents {
@@ -94,4 +95,11 @@ a {
   color: #fff;
   margin: 0 5px;
   border-radius: 5px;
+}
+
+@media all and (max-width: 1200px) {
+  #contents {
+    width: 100%;
+    padding: 100px 20px;
+  }
 }
