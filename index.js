@@ -13,29 +13,35 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
-  new LocalStrategy({
-    usernameField:"userID",
-    passwordField:"userPW",
-    session:true,
-    passReqToCallback:false
-  },
-  (id,password,done)=>{
-    console.log(id,"====",password);
-    db.collection("member").findOne({userID:id},(err,result)=>{
-      if(err) return done(err);
-      if(!result) return done(null,false,{message:"존재하지 않는 아이디 입니다."});
-      if(result) {
-        if(password===result.userPW) {
-          console.log("로그인 성공");
-          return done(null,result);
-        } else {
-          console.log("로그인 실패");
-          return done(null,false,{message:"password를 확인해주세요."});
+  new LocalStrategy(
+    {
+      usernameField: "userID",
+      passwordField: "userPW",
+      session: true,
+      passReqToCallback: false,
+    },
+    (id, password, done) => {
+      console.log(id, "====", password);
+      db.collection("member").findOne({ userID: id }, (err, result) => {
+        if (err) {
+          return done(err);
         }
-      }
-    })
-  });
-)
+        if (!result) {
+          return done(null, false, { message: "존재하지 않는 아이디 입니다." });
+        }
+        if (result) {
+          if (password === result.userPW) {
+            console.log("로그인 성공");
+            return done(null, result);
+          } else {
+            console.log("로그인 실패");
+            return done(null, false, { message: "password를 확인해주세요." });
+          }
+        }
+      });
+    }
+  )
+);
 
 const MongoClient = require("mongodb").MongoClient;
 let db = null;
@@ -84,7 +90,7 @@ app.post("/login", (req, res) => {
   //res.render("login");
 });
 */
-app.post("/login",passport.authenticate("local",{failureRedirect:"/login",successRedirect:"/"}))
+app.post("/login", passport.authenticate("local", { failureRedirect: "/login", successRedirect: "/" }));
 
 app.post("/register", (req, res) => {
   const userID = req.body.userID;
