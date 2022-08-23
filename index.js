@@ -2,13 +2,27 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv").config();
 const path = require("path");
-
+let count = 0;
 // session처리용...
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
-const { copyFileSync } = require("fs");
-const { serialize } = require("v8");
+
+const MongoClient = require("mongodb").MongoClient;
+let db = null;
+MongoClient.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, (err, client) => {
+  if (err) {
+    console.log(err);
+  }
+  db = client.db("crudapp");
+});
+
+app.set("port", process.env.PORT || 8099);
+const PORT = app.get("port");
+console.log(__dirname);
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.use(
   session({
@@ -31,11 +45,14 @@ passport.use(
     },
     (id, password, done) => {
       console.log(id, "====", password);
+
       db.collection("member").findOne({ userID: id }, (err, result) => {
         if (err) {
+          console.log("에러");
           return done(err);
         }
         if (!result) {
+          console.log("result 없음");
           return done(null, false, { message: "존재하지 않는 아이디 입니다." });
         }
         if (result) {
@@ -54,33 +71,20 @@ passport.use(
 
 // 직렬화
 passport.serializeUser((user, done) => {
-  //console.log("serializeUser===", user);
+  console.log("serializeUser");
   done(null, user.userID);
 });
 
 // 직렬화
 passport.deserializeUser((id, done) => {
+  console.log(id);
   db.collection("member").findOne({ userID: id }, (err, result) => {
     done(null, result);
   });
 });
 
-const MongoClient = require("mongodb").MongoClient;
-let db = null;
-MongoClient.connect(process.env.MONGO_URL, { useUnifiedTopology: true }, (err, client) => {
-  if (err) {
-    console.log(err);
-  }
-  db = client.db("crudapp");
-});
-
-app.set("port", process.env.PORT || 8099);
-const PORT = app.get("port");
-console.log(__dirname);
-app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "/public")));
 app.get("/", (req, res) => {
+  console.log(req.session);
   res.render("index", { title: "main", userInfo: req.user });
 });
 app.get("/join", (req, res) => {
@@ -94,6 +98,7 @@ app.get("/login", (req, res) => {
 });
 app.get("/logout", (req, res) => {
   if (req.user) {
+    req.logOut();
     req.session.destroy();
     //res.redirect("/");
     res.send(`<script>alert("로그아웃되었습니다."); location.href="/"</script>`);
@@ -104,9 +109,9 @@ app.get("/delete", (req, res) => {
   res.render("delete", { title: "Member Delete" });
 });
 app.post("/delete", (req, res) => {
-  console.log(req.user.userID);
+  console.log(req);
   const userPW = req.body.userPW;
-  db.collection("member").deleteOne({ userID: req.user.userID, userPW: userPW }, (err, result) => {
+  db.collection("member").deleteOne({ userID: req.user.userID, userPW: req.user.userPW }, (err, result) => {
     console.log(result);
     if (result.deletedCount > 0) {
       res.send(`<script>alert("회원탈퇴 되었습니다.");location.href="/"</script>`);
@@ -117,7 +122,9 @@ app.post("/delete", (req, res) => {
 });
 
 app.get("/mypage", isLogged, (req, res) => {
-  //console.log(req.user);
+  console.log("=============================");
+  console.log(req.session);
+  console.log("=============================");
   res.render("mypage", { title: "mypage", userInfo: req.user });
 });
 
@@ -191,14 +198,14 @@ app.post("/register", (req, res) => {
   const userGender = req.body.gender;
   const userJob = req.body.job;
   // 넘어온 값은 서버에서 처리하기...
-  console.log(userID);
-  console.log(userPW);
-  console.log(userName);
-  console.log(userEmail);
-  console.log(userZipcode);
-  console.log(userAddress);
-  console.log(userGender);
-  console.log(userJob);
+  // console.log(userID);
+  // console.log(userPW);
+  // console.log(userName);
+  // console.log(userEmail);
+  // console.log(userZipcode);
+  // console.log(userAddress);
+  // console.log(userGender);
+  // console.log(userJob);
   const insertData = {
     userID: userID,
     userPW: userPW,
